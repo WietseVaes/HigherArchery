@@ -1,0 +1,1 @@
+Public github repository for a Winter 2025 project on Hierachical matrices. This involves approximating matrices with some different types of matrices fast and efficiently. As well as implementing fast matrix-matrix multiplication matrix-vector multiplication and solvers.
