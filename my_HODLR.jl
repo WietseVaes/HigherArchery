@@ -1,4 +1,5 @@
-function my_HODLR(A, k, energy)
+function my_HODLR(Ab, k, energy)
+    A = copy(Ab)
     N = size(A,1);
     if (N/2 < k && k <= N)
         return A
