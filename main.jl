@@ -4,6 +4,7 @@ include("my_svd_replacer.jl");
 include("HODLR.jl");
 include("HODLR_revert.jl");
 include("bin_tree.jl");
+include("HBS.jl");
 N_init = 2^10;
 grid = collect(range(0, stop=1, length=2*N_init+2)[2:end-1]);  # remove first and last
 y = grid[1:2:end];  # odd indices
