@@ -5,6 +5,8 @@ include("HODLR.jl");
 include("HODLR_revert.jl");
 include("bin_tree.jl");
 include("HBS.jl");
+include("HBS_ID.jl");
+include("ID.jl")
 N_init = 2^10;
 grid = collect(range(0, stop=1, length=2*N_init+2)[2:end-1]);  # remove first and last
 y = grid[1:2:end];  # odd indices
