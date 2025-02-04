@@ -1,4 +1,5 @@
-function HBS(A, k)
+function HBS(Ab, k)
+    A = copy(Ab)
     N = size(A, 2)
     levels = bin_tree(N, k)
     L = length(levels)
@@ -10,8 +11,9 @@ function HBS(A, k)
     y = [Any[] for _ in 1:L]
     z = [Any[] for _ in 1:L]
     B = [Any[] for _ in 1:L]
-    Ut = [Any[] for _ in 1:L]
-    Vt = [Any[] for _ in 1:L]
+    #Find a general way to inilize Ut and Vt. L+3 only works for N=2^10 and k = 50
+    Ut = [Any[] for _ in 1:L+3]
+    Vt = [Any[] for _ in 1:L+3]
     
     for l in 2:L
         local_level = levels[l]
@@ -81,6 +83,9 @@ function HBS(A, k)
                 #PUSHING/ INDEXING COULD BE WRONG WAS ORIGIONALLY 
                 #Ut[l-1][ceil(Int, tau1/2)] = vcat(U[l][tau1]' * U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
                     #U[l][tau1+1]' * U[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :])
+                println("Ut Size: ", size(Ut))
+                println("l-1,ceil(Int, tau1/2) : " , l-1, ", ", ceil(Int, tau1/2))
+        
                 Ut[l-1] = push!(Ut[ceil(Int, tau1/2)], vcat(U[l][tau1]' * U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
                 U[l][tau1+1]' * U[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :]))
                 

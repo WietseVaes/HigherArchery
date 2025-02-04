@@ -25,8 +25,8 @@ U, V, Adiag = HODLR(A, 50);
 
 A_HODLR_paper = HODLR_revert(U, V, Adiag)
 #
-A_HBS, _, _, _, _ = HBS(A, 50)
-A_HBS_ID = HBS_ID(A, 50)
+A_HBS, _, _, _, _, _ = HBS(A, 50)
+#A_HBS_ID = HBS_ID(A, 50)
 
 # Error displays
 @printf "my HODLR: rel. normed err: \n" 
@@ -34,7 +34,7 @@ A_HBS_ID = HBS_ID(A, 50)
 @printf "HODLR: rel. normed err."
 (norm(A_HODLR_paper - A) / norm(A))|>display
 @printf "HBS: rel. normed err. %.5f\n" (norm(A_HBS - A) / norm(A))
-@printf "HBS ID: rel. normed err. %.5f\n" (norm(A_HBS_ID - A) / norm(A))
+#@printf "HBS ID: rel. normed err. %.5f\n" (norm(A_HBS_ID - A) / norm(A))
 
 # Plots
 plotlyjs()  # Or use your preferred backend
@@ -53,11 +53,13 @@ p3 = surface(abs.(A_HBS - A), color=:jet, zscale=:log10,
 xlims!(1, size(A, 1))
 ylims!(1, size(A, 2))
 
-p4 = surface(abs.(A_HBS_ID - A), color=:jet, zscale=:log10,
-             title=@sprintf("HBS ID: rel. normed err. %.5f", norm(A_HBS_ID - A) / norm(A)))
-xlims!(1, size(A, 1))
-ylims!(1, size(A, 2))
+#p4 = surface(abs.(A_HBS_ID - A), color=:jet, zscale=:log10,
+             #title=@sprintf("HBS ID: rel. normed err. %.5f", norm(A_HBS_ID - A) / norm(A)))
+#xlims!(1, size(A, 1))
+#ylims!(1, size(A, 2))
 
 # Combine subplots
-plot(p1, p2, p3, p4, layout=(2, 2), size=(1000, 800))
+#plot(p1, p2, p3, p4, layout=(2, 2), size=(1000, 800))
+plot(p1, p2, p3, layout=(2, 2), size=(1000, 800))
+
 #
