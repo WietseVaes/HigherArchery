@@ -25,7 +25,7 @@ U, V, Adiag = HODLR(A, 50);
 
 A_HODLR_paper = HODLR_revert(U, V, Adiag)
 #
-A_HBS, _, _, _, _, _ = HBS(A, 50)
+A_HBS, Ut, _, _, _, _ = HBS(A, 50)
 #A_HBS_ID = HBS_ID(A, 50)
 
 # Error displays
