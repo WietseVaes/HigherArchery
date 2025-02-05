@@ -12,8 +12,8 @@ function HBS(Ab, k)
     z = [Any[] for _ in 1:L]
     B = [Any[] for _ in 1:L]
     #Find a general way to inilize Ut and Vt. L+3 only works for N=2^10 and k = 50
-    Ut = [Any[] for _ in 1:L+3]
-    Vt = [Any[] for _ in 1:L+3]
+    Ut = [Any[] for _ in 1:L]
+    Vt = [Any[] for _ in 1:L]
     
     for l in 2:L
         local_level = levels[l]
@@ -85,8 +85,13 @@ function HBS(Ab, k)
                     #U[l][tau1+1]' * U[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :])
                 println("Ut Size: ", size(Ut))
                 println("l-1,ceil(Int, tau1/2) : " , l-1, ", ", ceil(Int, tau1/2))
-        
-                Ut[l-1] = push!(Ut[ceil(Int, tau1/2)], vcat(U[l][tau1]' * U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
+                
+                
+                if size(Ut,1) < l-1
+                    Ut = push!(Ut,[])
+                end
+
+                Ut[l-1] = push!(Ut[l-1], vcat(U[l][tau1]' * U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
                 U[l][tau1+1]' * U[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :]))
                 
                 #Ut[l-1][ceil(Int, tau1/2)] = vcat(U[l][tau1]' * U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
@@ -123,8 +128,12 @@ function HBS(Ab, k)
             B[l] = push!(B[l],b12 * (X2[1:r, :]'))
             B[l]= push!(B[l],b21 * (X1[1:r, :]'))
 
+            if size(Vt,1) < l-1
+                Vt = push!(Vt,[])
+            end
+
             if l != 2
-                Vt[l-1] = push!(Vt[ceil(Int, tau1/2)], vcat(V[l][tau1]' * V[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
+                Vt[l-1] = push!(Vt[l-1], vcat(V[l][tau1]' * V[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
                 V[l][tau1+1]' * V[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :]))
                 
                 #ORIGIONALLY ABOVE COULD BE WRONG
