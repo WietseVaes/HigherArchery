@@ -33,7 +33,8 @@ A_HBS, Ut, _, _, _, _ = HBS(A, 50)
 (norm(A_HODLR - A) / norm(A))|>display
 @printf "HODLR: rel. normed err."
 (norm(A_HODLR_paper - A) / norm(A))|>display
-@printf "HBS: rel. normed err. %.5f\n" (norm(A_HBS - A) / norm(A))
+@printf "HBS: rel. normed err. %.5f\n" 
+(norm(A_HBS - A) / norm(A))|>display
 #@printf "HBS ID: rel. normed err. %.5f\n" (norm(A_HBS_ID - A) / norm(A))
 
 # Plots
