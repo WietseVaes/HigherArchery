@@ -7,6 +7,7 @@ include("bin_tree.jl");
 include("HBS.jl");
 include("HBS_ID.jl");
 include("ID.jl")
+include("MVmult.jl")
 N_init = 2^10;
 grid = collect(range(0, stop=1, length=2*N_init+2)[2:end-1]);  # remove first and last
 y = grid[1:2:end];  # odd indices
@@ -63,4 +64,9 @@ ylims!(1, size(A, 2))
 # Combine subplots
 plot(p1, p2, p3, p4, layout=(2, 2), size=(1000, 800))
 
-#
+x = rand(Int, size(A_HODLR, 2))
+Y = zeros(size(A_HODLR, 2)) 
+
+Y = zeros(size(A_HODLR, 2), 1)
+MV = MVmult(Adiag, U, V, x, Y, 50)
+

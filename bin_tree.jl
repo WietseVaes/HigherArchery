@@ -1,6 +1,5 @@
 function bin_tree(N, k)
     len_branch = N
-    println("lenbranch", len_branch)
     counter = 1
     tree = Any[]
 

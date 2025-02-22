@@ -33,38 +33,29 @@ function HBS(Ab, k)
         Omega1 .= zeros(N, r)
         Omega2 .= zeros(N, r)
         
-        println("Y1:", size(Y1))
+
         
         for tau1 in 1:2:(length(local_level) - 1)
             alpha = local_level[tau1]
             beta = local_level[tau1 + 1]
-            println("tau:", tau1)
-            println("alpha", size(alpha))
             
 
             if l == 2
                 Y_loc_1 = Y1[alpha, :]
                 Y_loc_2 = Y2[beta, :]
             else
-                println("U[l-1][ceil(Int, tau1/2)] size: ", size(U[l-1][ceil(Int, tau1/2)]))
-                println("y[l-1][ceil(Int, tau1/2)] size: ", size(y[l-1][ceil(Int, tau1/2)]))
-                println("long:", size(U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :]))
-                println("final:", size(U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :] * y[l-1][ceil(Int, tau1/2)]))
-                println("YLOC1:",size(Y1[alpha, :]), size(U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :] * y[l-1][ceil(Int, tau1/2)] ))
-                println("first:", size(Y1[alpha, :]))
+
                 Y_loc_1 = hcat(Y1[alpha, :], U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :] * y[l-1][ceil(Int, tau1/2)])
                 Y_loc_2 = hcat(Y2[beta, :], U[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :] * y[l-1][ceil(Int, tau1/2)])
             end
-            println("Y_loc_1: ", size(Y_loc_1))
-            println("Y_loc_2: ", size(Y_loc_2))
+
             #instead of U[l][tau1] make a u_inb and push to U later 
             #y[l][tau1] is a vector --> manually svd(Y_loc_1, full=false)
             
             #U[l][tau1+1], y[l][tau1+1], _ = svd(Y_loc_2, full=false)
             #Omega1[alpha, :] .= U[l][tau1]
             #Omega2[beta, :] .= U[l][tau1+1]
-            println(typeof(Y_loc_1))
-            println(typeof(Y_loc_2))
+
             U_inb0, y_inb0, _ = svd(Y_loc_1, full=false)
             y_inb0 = diagm(y_inb0)
             U[l] = push!(U[l],U_inb0)
@@ -83,8 +74,6 @@ function HBS(Ab, k)
                 #PUSHING/ INDEXING COULD BE WRONG WAS ORIGIONALLY 
                 #Ut[l-1][ceil(Int, tau1/2)] = vcat(U[l][tau1]' * U[l-1][ceil(Int, tau1/2)][1:Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2), :],
                     #U[l][tau1+1]' * U[l-1][ceil(Int, tau1/2)][Int(size(U[l-1][ceil(Int, tau1/2)], 1)/2)+1:end, :])
-                println("Ut Size: ", size(Ut))
-                println("l-1,ceil(Int, tau1/2) : " , l-1, ", ", ceil(Int, tau1/2))
                 
                 
                 if size(Ut,1) < l-1
