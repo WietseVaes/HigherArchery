@@ -1,26 +1,20 @@
 #Structures#
 
 struct LR
-    U:: Array #column rank k 
-    V:: Array #row rank k
+    U::Array #column rank k 
+    V::Array #row rank k
 end
 
 struct HODLRMat
-    LR1:: LR
-    LR2:: LR
-    H1:: Union{HODLRMat, Array}
-    H2:: Union{HODLRMat, Array}
-
-
-    # function 
-    function *()
-
-    end  
+    LR1::LR
+    LR2::LR
+    H
+    H2
 end
 
 #Functions#
 function UVT(U,V)
-    return U*V'
+    U*transpose(V)
 end
 
 function constructHODLR(LR1::LR, LR2::LR, H1::Union{HODLRMat, Array}, H2:: Union{HODLRMat, Array}, Adiag::Array, level)

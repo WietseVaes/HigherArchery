@@ -1,3 +1,4 @@
+include("bin_tree.jl");
 function HBS(Ab, k)
     A = copy(Ab)
     N = size(A, 2)

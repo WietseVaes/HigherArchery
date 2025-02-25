@@ -1,3 +1,5 @@
+include("bin_tree.jl");
+include("ID.jl");
 function HBS_ID(A, k)
     Ares, Ut, y, z, Vt, B = HBS(A, k)
     N = size(A, 2)
