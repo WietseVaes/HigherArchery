@@ -8,6 +8,7 @@ include("HBS.jl");
 include("HBS_ID.jl");
 include("ID.jl")
 include("MVmult.jl")
+include("HODLRStructNew.jl")
 N_init = 2^10;
 grid = collect(range(0, stop=1, length=2*N_init+2)[2:end-1]);  # remove first and last
 y = grid[1:2:end];  # odd indices
@@ -29,6 +30,9 @@ A_HODLR_paper = HODLR_revert(U, V, Adiag)
 A_HBS, Ut, _, _, _, _ = HBS(A, 50)
 A_HBS_ID = HBS_ID(A, 50)
 
+
+HODLRStruct = buildHODLRMat(U, V, Adiag)
+
 # Error displays
 @printf "my HODLR: rel. normed err: \n" 
 (norm(A_HODLR - A) / norm(A))|>display
@@ -42,21 +46,22 @@ A_HBS_ID = HBS_ID(A, 50)
 # Plots
 plotlyjs()  # Or use your preferred backend
 
-p1 = heatmap(abs.(A_HODLR - A), color=:jet, zscale=:log10)
+p1 = heatmap(abs.(A_HODLR - A), color=:romaO50, zscale=:log10)
 xlims!(1, size(A, 1))
 ylims!(1, size(A, 2))
 
-p2 = heatmap(abs.(A_HODLR_paper - A), color=:jet, zscale=:log10,
+
+p2 = heatmap(abs.(A_HODLR_paper - A), color=:romaO50, zscale=:log10,
              title=@sprintf("HODLR: rel. normed err. %.5f", norm(A_HODLR_paper - A) / norm(A)))
 xlims!(1, size(A, 1))
 ylims!(1, size(A, 2))
 
-p3 = heatmap(abs.(A_HBS - A), color=:jet, zscale=:log10,
+p3 = heatmap(abs.(A_HBS - A), color=:romaO50, zscale=:log10,
              title=@sprintf("HBS: rel. normed err. %.5f", norm(A_HBS - A) / norm(A)))
 xlims!(1, size(A, 1))
 ylims!(1, size(A, 2))
 
-p4 = heatmap(abs.(A_HBS_ID - A), color=:jet, zscale=:log10,
+p4 = heatmap(abs.(A_HBS_ID - A), color=:romaO50, zscale=:log10,
              title=@sprintf("HBS ID: rel. normed err. %.5f", norm(A_HBS_ID - A) / norm(A)))
 xlims!(1, size(A, 1))
 ylims!(1, size(A, 2))
@@ -64,9 +69,9 @@ ylims!(1, size(A, 2))
 # Combine subplots
 plot(p1, p2, p3, p4, layout=(2, 2), size=(1000, 800))
 
-x = rand(Int, size(A_HODLR, 2))
-Y = zeros(size(A_HODLR, 2)) 
+#x = rand(Int, size(A_HODLR, 2))
+#Y = zeros(size(A_HODLR, 2)) 
 
-Y = zeros(size(A_HODLR, 2), 1)
-MV = MVmult(Adiag, U, V, x, Y, 50)
+#Y = zeros(size(A_HODLR, 2), 1)
+#MV = MVmult(Adiag, U, V, x, Y, 50)
 
