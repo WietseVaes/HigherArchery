@@ -12,7 +12,28 @@ Y = 0*x' .+ y;
 A = 1.0 ./ (X .- Y);
 
 A_HODLR = HODLR(A, 50);
+A_HODLR2 = HODLR(2 * A, 50);
+
+xxx = rand(N_init);
+
+norm(A_HODLR * xxx - A*xxx) / norm(A*xxx)|>display
+
+norm(Matrix(A_HODLR * A_HODLR) - A^2)/ norm(A^2)|>display
+norm(Matrix(A_HODLR * A_HODLR2) - 2*A*A)/ norm(2*A^2) |>display
+
 B = Matrix(A_HODLR);
+
+@time A_HODLR_sum = A_HODLR+A_HODLR;
+
+@time A+A;
+
+@time B2 = Matrix(A_HODLR_sum);
+
+@time B3 = Matrix(A_HODLR2);
+
+@time B2 - B3;
+
+@time norm(Matrix(A_HODLR+A_HODLR)-Matrix(A_HODLR2))
 
 #
 A_HBS, Ut, _, _, _, _ = HBS(A, 50);

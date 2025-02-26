@@ -132,10 +132,102 @@ function size(A::HODLR)
     2 .* (size(A.BL,1), size(A.TR,2))
 end
 
+function +(A::HODLR,B::HODLR)
+    C = HODLR(A.TL + B.TL, A.TR + B.TR, A.BL + B.BL, A.BR + B.BR)
+end
+
+function +(A::HODLR,B::LR)
+    C = HODLR(A.TL + B.TL, A.TR + B.TR, A.BL + B.BL, A.BR + B.BR)
+end
+
+function *(A::HODLR,α::Number)
+    C = HODLR(α*A.TL, α*A.TR, α*A.BL, α*A.BR)
+end
+
+function *(α::Number,A::HODLR)
+    C = HODLR(α*A.TL, α*A.TR, α*A.BL, α*A.BR)
+end
+
 function *(A::HODLR,x::Array)
     y = zeros(length(x));
     n = size(A,2);
     I1 = 1:Int(n/2); I2 = (Int(n/2)+1):n;
     y[I1] = A.TL * x[I1] + A.TR * x[I2]
     y[I2] = A.BL * x[I1] + A.BR * x[I2]
+    return y
 end
+
+function *(A::HODLR, X::Matrix)
+    k = size(X,2);
+    Y = zeros(size(A,1), k);
+    for i1 = 1:k
+        Y[:,i1] = A*X[:,i1];
+    end
+    return Y
+end
+
+function *(x::Array, A::HODLR)
+    y = zeros(size(x));
+    n = size(A,2);
+    I1 = 1:Int(n/2); I2 = (Int(n/2)+1):n;
+    y[I1] = Matrix(transpose(x[I1])) * A.TL + Matrix(transpose(x[I2])) * A.BL 
+    y[I2] = Matrix(transpose(x[I1])) * A.TR + Matrix(transpose(x[I2])) * A.BR
+    return y
+end
+
+function *(X::Matrix, A::HODLR)
+    k = size(X,1);
+    Y = zeros(k, size(A,2));
+    for i1 = 1:k
+        Y[i1,:] = X[i1,:] * A;
+    end
+    return Y
+end
+
+function *(A::HODLR, X::LR)
+    LR(A*X.U,X.V)
+end
+
+function *(X::LR, A::HODLR)
+    LR(X.U,transpose(Matrix(transpose(X.V))*A))
+end
+
+function +(X::LR, A::HODLR)
+    n = size(X,1);
+    I1 = 1:Int(n/2); I2 = (Int(n/2)+1):n;
+    TL = LR(X.U[I1,:],X.V[I1,:]) + A.TL;
+    TR = LR(X.U[I1,:],X.V[I2,:])  + A.TR;
+    BL = LR(X.U[I2,:],X.V[I1,:]) + A.BL;
+    BR = LR(X.U[I2,:],X.V[I2,:]) + A.BR;
+    HODLR(TL,TR,BL,BR)
+end
+
+function +(A::HODLR, X::LR)
+    n = size(X,1);
+    I1 = 1:Int(n/2); I2 = (Int(n/2)+1):n;
+    TL = LR(X.U[I1,:],X.V[I1,:]) + A.TL;
+    TR = LR(X.U[I1,:],X.V[I2,:])  + A.TR;
+    BL = LR(X.U[I2,:],X.V[I1,:]) + A.BL;
+    BR = LR(X.U[I2,:],X.V[I2,:]) + A.BR;
+    HODLR(TL,TR,BL,BR)
+end
+
+function *(A::HODLR, B::HODLR)
+    TL = A.TL * B.TL + A.TR * A.BL;
+    TR = A.TL * B.TR + A.TR * B.BR;
+    BL = A.BL * B.TL + A.BR * A.BL; 
+    BR = A.BL * B.TR + A.BR * B.BR;
+    HODLR(TL, TR, BL, BR)
+end
+
+
+function -(A::HODLR)
+    C = -1*A
+end
+
+function -(A::HODLR,B::HODLR)
+    C = A + (-1)*B
+end
+
+
+

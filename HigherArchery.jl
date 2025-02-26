@@ -2,7 +2,7 @@ module HigherArchery
 
 using LinearAlgebra
 import Base: +, -, *, size
-import LinearAlgebra: Matrix
+import LinearAlgebra: Matrix, rank
 
 export HODLR, depth
 export LR
