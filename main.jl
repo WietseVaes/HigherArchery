@@ -9,14 +9,14 @@ x = grid[2:2:end];  # even indices
 
 X = x' .+ 0*y;
 Y = 0*x' .+ y;
-A = 1.0 ./ (X .- Y);
+A = 1.0 ./ (X .- Y); #cauchy matrix --> HODLR Structure 
 
-A_HODLR = HODLR(A, 50);
+A_HODLR = HODLR(A, 50); #HODRL Rank 50 
 A_HODLR2 = HODLR(2 * A, 50);
 
 xxx = rand(N_init);
 
-norm(A_HODLR * xxx - A*xxx) / norm(A*xxx)|>display
+norm(A_HODLR * xxx - A*xxx) / norm(A*xxx)|>display #Testing HODLR approximation
 
 norm(Matrix(A_HODLR * A_HODLR) - A^2)/ norm(A^2)|>display
 norm(Matrix(A_HODLR * A_HODLR2) - 2*A*A)/ norm(2*A^2) |>display

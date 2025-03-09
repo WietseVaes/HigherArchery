@@ -7,6 +7,7 @@ struct HODLR
     BR
 end
 
+#Build HODLR given matrix and rank 
 function HODLR(A::Matrix, k::Int64)
     N = size(A, 2)
     levels = bin_tree(N, k)
@@ -78,6 +79,7 @@ function HODLR(A::Matrix, k::Int64)
     return HODLR(U, V, Adiag)
 end
 
+#Build HODLR Struct after converting matrix into HODLR 
 function HODLR(U::Array, V::Array, Adiag::Array)
     n = length(U);
     Last_HODLR = [];
@@ -97,6 +99,7 @@ function HODLR(U::Array, V::Array, Adiag::Array)
     return Last_HODLR[1]
 end
 
+#Get number of levels
 function depth(A::HODLR)
     Len = 1
     while typeof(A.TL) == HODLR
@@ -106,6 +109,7 @@ function depth(A::HODLR)
     return Len
 end
 
+#Build origional full matrix  
 function Matrix(A::HODLR)
     n_half = size(A.TR.U,1);
     n = 2*n_half;
@@ -117,6 +121,7 @@ function Matrix(A::HODLR)
     return B
 end
 
+#Size of HODLR in given dimension
 function size(A::HODLR,i1::Int)
     if i1 == 1
         n_half = size(A.BL,1);
@@ -125,21 +130,26 @@ function size(A::HODLR,i1::Int)
     else
         error("error: invalid index.")
     end
+    
     2*n_half
 end
 
+#HODLR dimension
 function size(A::HODLR)
     2 .* (size(A.BL,1), size(A.TR,2))
 end
 
+#Element wise addition of HODLR matrices
 function +(A::HODLR,B::HODLR)
     C = HODLR(A.TL + B.TL, A.TR + B.TR, A.BL + B.BL, A.BR + B.BR)
 end
 
+#Is this correct? LR should not have attribute TL, TR, etc. 
 function +(A::HODLR,B::LR)
     C = HODLR(A.TL + B.TL, A.TR + B.TR, A.BL + B.BL, A.BR + B.BR)
 end
 
+#Scales each "block" by alpha
 function *(A::HODLR,α::Number)
     C = HODLR(α*A.TL, α*A.TR, α*A.BL, α*A.BR)
 end
@@ -148,6 +158,7 @@ function *(α::Number,A::HODLR)
     C = HODLR(α*A.TL, α*A.TR, α*A.BL, α*A.BR)
 end
 
+#HODLR Vector multiplication
 function *(A::HODLR,x::Array)
     y = zeros(length(x));
     n = size(A,2);
@@ -157,15 +168,6 @@ function *(A::HODLR,x::Array)
     return y
 end
 
-function *(A::HODLR, X::Matrix)
-    k = size(X,2);
-    Y = zeros(size(A,1), k);
-    for i1 = 1:k
-        Y[:,i1] = A*X[:,i1];
-    end
-    return Y
-end
-
 function *(x::Array, A::HODLR)
     y = zeros(size(x));
     n = size(A,2);
@@ -173,6 +175,16 @@ function *(x::Array, A::HODLR)
     y[I1] = Matrix(transpose(x[I1])) * A.TL + Matrix(transpose(x[I2])) * A.BL 
     y[I2] = Matrix(transpose(x[I1])) * A.TR + Matrix(transpose(x[I2])) * A.BR
     return y
+end
+
+
+function *(A::HODLR, X::Matrix)
+    k = size(X,2);
+    Y = zeros(size(A,1), k);
+    for i1 = 1:k
+        Y[:,i1] = A*X[:,i1];
+    end
+    return Y
 end
 
 function *(X::Matrix, A::HODLR)
