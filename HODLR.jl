@@ -144,10 +144,22 @@ function +(A::HODLR,B::HODLR)
     C = HODLR(A.TL + B.TL, A.TR + B.TR, A.BL + B.BL, A.BR + B.BR)
 end
 
-#Is this correct? LR should not have attribute TL, TR, etc. 
-function +(A::HODLR,B::LR)
-    C = HODLR(A.TL + B.TL, A.TR + B.TR, A.BL + B.BL, A.BR + B.BR)
-end
+# function +(A::HODLR,B::LR)
+#     #m = size of hodlr ie. size of 1/4 of matrix
+#     m = size(H.TL)
+
+#     # Subset U,V (U --> rows, V --> cols)
+#     LR_TL = LR(L.U[1:m, :], L.V[1:m, :])
+#     LR_TR = LR(L.U[1:m, :],  L.V[m+1:end, :])
+#     LR_BL = LR(L.U[m+1:end, :], L.V[1:m, :])
+#     LR_BR = LR(L.U[m+1:end, :], L.V[m+1:end, :])
+    
+#     #Update HODRL
+#     new_TL = H.TL + LR_TL, new_BR = H.BR + LR_BR #HODRL/Dense + LR
+#     new_TR = H.TR + LR_TR, new_BL = H.BL + LR_BL #LR + LR 
+
+#     HODLR(new_TL, new_TR, new_BL, new_BR)
+# end
 
 #Scales each "block" by alpha
 function *(A::HODLR,α::Number)
@@ -176,7 +188,6 @@ function *(x::Array, A::HODLR)
     y[I2] = Matrix(transpose(x[I1])) * A.TR + Matrix(transpose(x[I2])) * A.BR
     return y
 end
-
 
 function *(A::HODLR, X::Matrix)
     k = size(X,2);
@@ -225,9 +236,11 @@ function +(A::HODLR, X::LR)
 end
 
 function *(A::HODLR, B::HODLR)
-    TL = A.TL * B.TL + A.TR * A.BL;
+    #TL = A.TL * B.TL + A.TR * A.BL; Old
+    TL = A.TL * B.TL + A.TR * B.BL; #new 
     TR = A.TL * B.TR + A.TR * B.BR;
-    BL = A.BL * B.TL + A.BR * A.BL; 
+    #BL = A.BL * B.TL + A.BR * A.BL; Old
+    BL = A.BL * B.TL + A.BR * B.BL; #new 
     BR = A.BL * B.TR + A.BR * B.BR;
     HODLR(TL, TR, BL, BR)
 end

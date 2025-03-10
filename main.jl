@@ -11,15 +11,16 @@ X = x' .+ 0*y;
 Y = 0*x' .+ y;
 A = 1.0 ./ (X .- Y); #cauchy matrix --> HODLR Structure 
 
+
 A_HODLR = HODLR(A, 50); #HODRL Rank 50 
 A_HODLR2 = HODLR(2 * A, 50);
 
+
 xxx = rand(N_init);
+norm(A_HODLR * xxx - A*xxx) / norm(A*xxx)|>display #Testing HODLR-Vec mult
 
-norm(A_HODLR * xxx - A*xxx) / norm(A*xxx)|>display #Testing HODLR approximation
-
-norm(Matrix(A_HODLR * A_HODLR) - A^2)/ norm(A^2)|>display
-norm(Matrix(A_HODLR * A_HODLR2) - 2*A*A)/ norm(2*A^2) |>display
+norm(Matrix(A_HODLR * A_HODLR) - A^2)/ norm(A^2)|>display #testing HODLR-HODLR Mult w same HODRL
+norm(Matrix(A_HODLR * A_HODLR2) - 2*A*A)/ norm(2*A^2) |>display#testing HODLR-HODLR Mult w diff HODRL
 
 B = Matrix(A_HODLR);
 
@@ -41,7 +42,7 @@ A_HBS_ID = HBS_ID(A, 50);
 
 # Error displays
 @printf "my HODLR: rel. normed err: \n" 
-(norm(B - A) / norm(A))|>display
+(norm(B - A) / norm(A))|>display 
 @printf "HBS: rel. normed err:\n" 
 (norm(A_HBS - A) / norm(A))|>display
 @printf "HBS ID: rel. normed err:\n" 
