@@ -52,9 +52,6 @@ function +(A::LR,B::LR)
     LR(U_svd[:, 1:k] * Diagonal(S[1:k]), V_svd[:, 1:k])
 end
 
-
-
-
 function +(A::LR,B::Matrix)
     Matrix(A) + B;
 end

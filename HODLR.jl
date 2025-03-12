@@ -186,7 +186,7 @@ function *(x::Array, A::HODLR)
     I1 = 1:Int(n/2); I2 = (Int(n/2)+1):n;
     y[I1] = Matrix(transpose(x[I1])) * A.TL + Matrix(transpose(x[I2])) * A.BL 
     y[I2] = Matrix(transpose(x[I1])) * A.TR + Matrix(transpose(x[I2])) * A.BR
-    return y
+    return Matrix(transpose(y))
 end
 
 function *(A::HODLR, X::Matrix)
@@ -226,20 +226,12 @@ function +(X::LR, A::HODLR)
 end
 
 function +(A::HODLR, X::LR)
-    n = size(X,1);
-    I1 = 1:Int(n/2); I2 = (Int(n/2)+1):n;
-    TL = LR(X.U[I1,:],X.V[I1,:]) + A.TL;
-    TR = LR(X.U[I1,:],X.V[I2,:])  + A.TR;
-    BL = LR(X.U[I2,:],X.V[I1,:]) + A.BL;
-    BR = LR(X.U[I2,:],X.V[I2,:]) + A.BR;
-    HODLR(TL,TR,BL,BR)
+    X + A
 end
 
 function *(A::HODLR, B::HODLR)
-    #TL = A.TL * B.TL + A.TR * A.BL; Old
     TL = A.TL * B.TL + A.TR * B.BL; #new 
     TR = A.TL * B.TR + A.TR * B.BR;
-    #BL = A.BL * B.TL + A.BR * A.BL; Old
     BL = A.BL * B.TL + A.BR * B.BL; #new 
     BR = A.BL * B.TR + A.BR * B.BR;
     HODLR(TL, TR, BL, BR)
